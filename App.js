@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import VideoPlayer from './Components/VideoPlayer';
+import AudioPlayer from './Components/AudioPlayer';
 
 const App = () => {
   return (
     <View style={styles.container}>
-      <VideoPlayer />
+      {/* <VideoPlayer />       */}
+      <AudioPlayer />
     </View>
   );
 };
