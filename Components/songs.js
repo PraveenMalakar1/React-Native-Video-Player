@@ -49,39 +49,45 @@
 
 const songs = [
     {
-      title: "death bed",
-      artist: "Powfu",
-      image: "http://www.archive.org/download/LibrivoxCdCoverArt8/hamlet_1104.jpg",
+      title: "947 Radio",
+      artist: "South Africa",
+      image: "https://streamafrica-production.s3.af-south-1.amazonaws.com/south-africa-radio-947-TXEOyW.jpg",
+      url: "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
       id: "1",
     },
     {
       title: "bad liar",
       artist: "Imagine Dragons",
       image: "https://picsum.photos/200",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
       id: "2",
     },
     {
       title: "faded",
       artist: "Alan Walker",
       image: "https://picsum.photos/id/237/200/300",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
       id: "3",
     },
     {
       title: "hate me",
       artist: "Ellie Goulding",
       image: "https://picsum.photos/seed/picsum/200/300",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
       id: "4",
     },
     {
       title: "Solo",
       artist: "Clean Bandit",
       image: "https://picsum.photos/200/300.jpg",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
       id: "5",
     },
     {
       title: "without me",
       artist: "Halsey",
       image: "https://picsum.photos/200/300?grayscale",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
       id: "6",
     },
   ];
