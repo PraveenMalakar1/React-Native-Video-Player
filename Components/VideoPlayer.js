@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
+import { StyleSheet, View, Platform, Button } from 'react-native';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 import Video from 'react-native-video';
 
-const VideoPlayer = () => {
-    
+const VideoPlayer = ({ navigation }) => {
+
     // The video we will play on the player.
     const video = require('../assets/video.mp4');
-    
+
     const videoPlayer = useRef(null);
     const [duration, setDuration] = useState(0);
     const [paused, setPaused] = useState(true);
@@ -59,6 +59,7 @@ const VideoPlayer = () => {
 
     return (
         <View>
+
             <Video
                 onEnd={onEnd}
                 onLoad={onLoad}
@@ -70,7 +71,7 @@ const VideoPlayer = () => {
                 ref={(ref) => (videoPlayer.current = ref)}
                 resizeMode={'cover'}
                 //source={video}
-                source={{uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4' }}
+                source={{ uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4' }}
                 style={styles.backgroundVideo}
             />
             <MediaControls
@@ -86,6 +87,15 @@ const VideoPlayer = () => {
                 playerState={playerState}
                 sliderStyle={{ containerStyle: {}, thumbStyle: {}, trackStyle: {} }}
             />
+            <View>
+                <Button
+                    title="Go To Audio"
+                    onPress={() =>
+                        navigation.navigate('Audio')
+                    }
+                />
+            </View>
+
         </View>
 
     );

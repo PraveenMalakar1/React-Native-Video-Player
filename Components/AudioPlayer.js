@@ -16,19 +16,20 @@ import SoundPlayer from 'react-native-sound-player'
 
 const { width, height } = Dimensions.get("window");
 
-export default function Player() {
+export default function Player ({ navigation, route }) {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const slider = useRef(null);
   const [songIndex, setSongIndex] = useState(0);
   const [track, setTrack] = useState();
   const [playing, setPlaying] = useState(false)
+  const [isTrackLoading, setTrackLoading] = useState(false)
   // for tranlating the album art
   const position = useRef(Animated.divide(scrollX, width)).current;
 
-  var onFinishedPlayingSubscription = null
-  var onFinishedLoadingSubscription = null
-  var onFinishedLoadingURLSubscription = null
+  var onFinishedPlayingSubscription = false
+  var onFinishedLoadingSubscription = false
+  var onFinishedLoadingURLSubscription = false
 
   useEffect(() => {
     // position.addListener(({ value }) => {
@@ -57,7 +58,7 @@ export default function Player() {
       console.log('finished loading', success)
     })
     onFinishedLoadingURLSubscription = SoundPlayer.addEventListener('FinishedLoadingURL', ({ success, url }) => {
-      console.log('finished loading url', success, url)
+      setTrackLoading(success)
     })
 
     return () => {
@@ -65,10 +66,11 @@ export default function Player() {
     };
   }, []);
 
-  console.log("onFinishedLoadingURLSubscription, ", onFinishedLoadingSubscription && onFinishedLoadingSubscription.success)
+  console.log("isTrackLoading, ", isTrackLoading)
 
   const goNext = () => {
     setPlaying(false)
+    setTrackLoading(false)
     SoundPlayer.unmount()
     let trackURL = songs[songIndex + 1].url
     slider.current.scrollToOffset({
@@ -79,6 +81,7 @@ export default function Player() {
   };
   const goPrv = () => {
     setPlaying(false)
+    setTrackLoading(false)
     SoundPlayer.unmount()
     let trackURL = songs[songIndex - 1].url
     slider.current.scrollToOffset({
@@ -146,7 +149,7 @@ export default function Player() {
         <Text style={styles.artist}>{songs[songIndex].artist}</Text>
       </View>
 
-      <Controller onNext={goNext} onPrv={goPrv} pauseSong={pauseSong} playing={playing} playSong={playSong} totalSongs={songs.length} currentSongIndex={songIndex + 1} setTrack={setTrack} soundData={songs[songIndex]} />
+      <Controller onNext={goNext} onPrv={goPrv} isTrackLoading={isTrackLoading} pauseSong={pauseSong} playing={playing} playSong={playSong} totalSongs={songs.length} currentSongIndex={songIndex + 1} setTrack={setTrack} soundData={songs[songIndex]} />
     </SafeAreaView>
   );
 }
@@ -156,13 +159,13 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: "center",
     textTransform: "capitalize",
-    color: "#fff"
+    color: "#000"
   },
   artist: {
     fontSize: 18,
     textAlign: "center",
     textTransform: "capitalize",
-    color: "#fff"
+    color: "#000"
   },
   container: {
     justifyContent: "space-evenly",
