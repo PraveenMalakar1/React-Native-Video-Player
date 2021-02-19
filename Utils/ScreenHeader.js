@@ -3,8 +3,6 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 const ScreenHeader = ({ title }) => {
 
-    console.log("title is, ", title)
-
     return (
         <SafeAreaView>
             <View style={styles.header}>

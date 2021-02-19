@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import VideoPlayer from './Components/VideoPlayer';
@@ -14,8 +14,20 @@ import {
 import Countries from './Components/Countries'
 import LogoImage from './Components/LogoImage'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import AppLoading from './Utils/AppLoading'
+import { persistCache } from 'apollo3-cache-persist'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const Stack = createStackNavigator();
+
+const cache = new InMemoryCache()
+
+const client = new ApolloClient({
+  uri: 'https://server.stream-africa.com/graphql',
+  cache,
+  defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
+})
 
 function CustomDrawerContent(props) {
   return (
@@ -53,8 +65,21 @@ function AppDrawer() {
 }
 
 const App = () => {
+  const [loadingCache, setLoadingCache] = useState(true)
+
+  useEffect(() => {
+    persistCache({
+      cache,
+      storage: AsyncStorage,
+    }).then(() => setLoadingCache(false))
+  }, [])
+
+  if (loadingCache) {
+    return <AppLoading />
+  }
+
   return (
-    <>
+    <ApolloProvider client={client}>
       <NavigationContainer>
         <AppDrawer />
         {/* <Stack.Navigator>
@@ -81,7 +106,7 @@ const App = () => {
           <Stack.Screen name="Audio" component={AudioPlayer} />
         </Stack.Navigator> */}
       </NavigationContainer>
-    </>
+    </ApolloProvider>
   );
 };
 
