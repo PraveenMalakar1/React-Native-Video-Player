@@ -36,7 +36,15 @@ export default function Player ({ navigation, route }) {
     //   console.log(value);
     // });
 
-    setTrack(songs[songIndex].url)
+
+    setTrack(songs[0].url)
+
+    console.log("songIndex, ", track)
+
+    if(track !== undefined || track !== null) {
+      setPlaying(true)
+      SoundPlayer.play()
+    }
 
     scrollX.addListener(({ value }) => {
       const val = Math.round(value / width);
