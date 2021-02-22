@@ -12,6 +12,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import Countries from './Components/Countries'
+import Stations from './Components/Stations'
 import LogoImage from './Components/LogoImage'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
@@ -60,6 +61,7 @@ function AppDrawer() {
       <Drawer.Screen name="Countries" component={Countries} />
       <Drawer.Screen name="AudioPlayer" component={AudioPlayer} />
       <Drawer.Screen name="VideoPlayer" component={VideoPlayer} />
+      <Drawer.Screen name="Stations" component={Stations} />
     </Drawer.Navigator>
   );
 }
@@ -82,29 +84,6 @@ const App = () => {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <AppDrawer />
-        {/* <Stack.Navigator>
-
-          <Stack.Screen
-            name="Countries"
-            component={Countries}
-            options={{
-              title: 'Countries',
-              image: 'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg',
-              headerStyle: {
-                backgroundColor: '#001B32',
-                height: 70,
-              },
-              headerTintColor: '#fff',
-              headerTitleStyle: {
-                fontWeight: 'bold',
-              },
-              headerLeft: () =>
-                <TouchableOpacity><Icon name="bars" size={30} color="#fff" style={{ paddingLeft: 10 }} /></TouchableOpacity>,
-              headerRight: () => <LogoImage />
-            }}
-          />
-          <Stack.Screen name="Audio" component={AudioPlayer} />
-        </Stack.Navigator> */}
       </NavigationContainer>
     </ApolloProvider>
   );
