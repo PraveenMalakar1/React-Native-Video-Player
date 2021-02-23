@@ -16,7 +16,7 @@ import SoundPlayer from 'react-native-sound-player'
 
 const { width, height } = Dimensions.get("window");
 
-export default function Player ({ navigation, route }) {
+export default function Player({ navigation, route }) {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const slider = useRef(null);
@@ -41,7 +41,7 @@ export default function Player ({ navigation, route }) {
 
     console.log("songIndex, ", track)
 
-    if(track !== undefined || track !== null) {
+    if (track !== undefined || track !== null) {
       setPlaying(true)
       SoundPlayer.play()
     }
@@ -83,7 +83,7 @@ export default function Player ({ navigation, route }) {
     let trackURL = songs[songIndex + 1].url
     slider.current.scrollToOffset({
       offset: (songIndex + 1) * width,
-    });  
+    });
     SoundPlayer.playUrl(trackURL)
     console.log("playing, ", trackURL)
   };
@@ -96,7 +96,7 @@ export default function Player ({ navigation, route }) {
       offset: (songIndex - 1) * width,
     });
     SoundPlayer.playUrl(trackURL)
-    
+
     console.log("playing, ", trackURL)
   };
 
@@ -110,55 +110,64 @@ export default function Player ({ navigation, route }) {
     SoundPlayer.play()
   }
 
-  const renderItem = ({ index, item }) => {
-    return (
-      <Animated.View
-        style={{
-          alignItems: "center",
-          width: width,
-          transform: [
-            {
-              translateX: Animated.multiply(
-                Animated.add(position, -index),
-                -100
-              ),
-            },
-          ],
-        }}
-      >
-        <Animated.Image
-          source={{ uri: item.image }}
-          style={{ width: 320, height: 320, borderRadius: 5 }}
-        />
-      </Animated.View>
-    );
-  };
+  // const renderItem = ({ index, item }) => {
+  //   return (
+  //     <Animated.View
+  //       style={{
+  //         alignItems: "center",
+  //         width: width,
+  //         transform: [
+  //           {
+  //             translateX: Animated.multiply(
+  //               Animated.add(position, -index),
+  //               -100
+  //             ),
+  //           },
+  //         ],
+  //       }}
+  //     >
+  //       <Animated.Image
+  //         source={{ uri: item.image }}
+  //         style={{ width: 320, height: 320, borderRadius: 5 }}
+  //       />
+  //     </Animated.View>
+  //   );
+  // };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <SafeAreaView style={{ height: 320 }}>
-        <Animated.FlatList
-          ref={slider}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
-          data={songs}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true }
-          )}
-        />
-      </SafeAreaView>
-      <View>
-        <Text style={styles.title}>{songs[songIndex].title}</Text>
-        <Text style={styles.artist}>{songs[songIndex].artist}</Text>
-      </View>
+    <View style={styles.container}>
+      {/* {isShowCardUI && <>
+        <SafeAreaView style={{ height: 320 }}>
+          <Animated.FlatList
+            ref={slider}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}
+            data={songs}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: true }
+            )}
+          />
+        </SafeAreaView>
+        <View>
+          <Text style={styles.title}>{songs[songIndex].title}</Text>
+          <Text style={styles.artist}>{songs[songIndex].artist}</Text>
+        </View>
+      </>
+      } */}
 
-      <Controller onNext={goNext} onPrv={goPrv} isTrackLoading={isTrackLoading} pauseSong={pauseSong} playing={playing} playSong={playSong} totalSongs={songs.length} currentSongIndex={songIndex + 1} setTrack={setTrack} soundData={songs[songIndex]} />
-    </SafeAreaView>
+      <Controller style={styles.controls} onNext={goNext} onPrv={goPrv}
+        isTrackLoading={isTrackLoading} pauseSong={pauseSong}
+        playing={playing} playSong={playSong}
+        totalSongs={songs.length}
+        currentSongIndex={songIndex + 1}
+        setTrack={setTrack}
+        soundData={songs[songIndex]} />
+    </View>
   );
 }
 
@@ -176,8 +185,9 @@ const styles = StyleSheet.create({
     color: "#000"
   },
   container: {
-    justifyContent: "space-evenly",
-    height: height,
-    maxHeight: 500,
+    position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: "#fff", padding: 10
   },
+  controls: {
+    display: "none"
+  }
 });

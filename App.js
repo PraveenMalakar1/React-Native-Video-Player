@@ -19,6 +19,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import AppLoading from './Utils/AppLoading'
 import { persistCache } from 'apollo3-cache-persist'
 import AsyncStorage from '@react-native-community/async-storage'
+import AppContextProvider from "./contexts/AppContext"
 
 const Stack = createStackNavigator();
 
@@ -82,9 +83,12 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <NavigationContainer>
-        <AppDrawer />
-      </NavigationContainer>
+      <AppContextProvider>
+        <NavigationContainer>
+          <AppDrawer />
+        </NavigationContainer>
+        <AudioPlayer />
+      </AppContextProvider>
     </ApolloProvider>
   );
 };

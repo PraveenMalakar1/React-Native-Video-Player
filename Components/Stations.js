@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { SafeAreaView, StyleSheet, Text, View, Dimensions, FlatList, Image, Pressable, ScrollView } from "react-native";
 import ScreenHeader from '../Utils/ScreenHeader'
 import { useQuery } from '@apollo/client'
 import AppLoading from "../Utils/AppLoading";
 import { QUERY_ALL_STATIONS } from "../Queries/stations"
+import { AppContext } from '../contexts/AppContext';
 
 
 const { width } = Dimensions.get("window");
@@ -25,6 +26,10 @@ const StationItem = ({ station, onPress }) => {
 }
 
 const Stations = ({ navigation, route }) => {
+
+    const { burgerClicked } = useContext(AppContext)
+
+    console.log("t is, ", burgerClicked)
 
     //console.log("route, ", route.params && route.params.Country)
 
