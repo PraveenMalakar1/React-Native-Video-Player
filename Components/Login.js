@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AppContext } from "../contexts/AppContext";
 
 
-export default function Login() {
+export default function Login({ navigation }) {
 
     const { userState, setUserState } = useContext(AppContext)
 
@@ -106,6 +106,9 @@ export default function Login() {
             <TouchableOpacity style={styles.loginBtn} disabled={submitted} onPress={validateAndSend}>
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.register_button}> Create Account</Text>
+            </TouchableOpacity>
             <Text style={displayError ? styles.show : styles.hide}>
                 {errorData}
             </Text>
@@ -140,7 +143,20 @@ const styles = StyleSheet.create({
     forgot_button: {
         height: 30,
         marginBottom: 30,
-        color: "#001b32"
+        marginTop: 10,
+        color: "#fff"
+    },
+    register_button: {
+        marginBottom: 10,
+        marginTop: 30,
+        //backgroundColor: "#fff",
+        padding: 15,
+        paddingLeft: 30,
+        paddingRight: 30,
+        color: "#fff",
+        borderRadius: 25,
+        fontWeight: "bold",
+        fontSize: 20
     },
     loginBtn: {
         width: "80%",
@@ -153,6 +169,7 @@ const styles = StyleSheet.create({
     loginText: {
         color: "#001b32",
         fontWeight: "bold",
+        fontSize: 20
     },
     show: {
         opacity: 1,
