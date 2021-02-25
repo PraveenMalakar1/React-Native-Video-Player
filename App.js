@@ -22,6 +22,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import AppContextProvider from "./contexts/AppContext"
 import { useDeviceOrientation } from "@react-native-community/hooks";
 import Login from './Components/Login';
+import Register from './Components/Register';
 
 const Stack = createStackNavigator();
 
@@ -66,6 +67,7 @@ function AppDrawer() {
       <Drawer.Screen name="VideoPlayer" component={VideoPlayer} />
       <Drawer.Screen name="Stations" component={Stations} />
       <Drawer.Screen name="Login" component={Login} />
+      <Drawer.Screen name="Register" component={Register} />
     </Drawer.Navigator>
   );
 }
