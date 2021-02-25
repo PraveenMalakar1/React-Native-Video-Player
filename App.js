@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import VideoPlayer from './Components/VideoPlayer';
 import AudioPlayer from './Components/AudioPlayer';
@@ -20,6 +20,7 @@ import AppLoading from './Utils/AppLoading'
 import { persistCache } from 'apollo3-cache-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 import AppContextProvider from "./contexts/AppContext"
+import { useDeviceOrientation } from "@react-native-community/hooks";
 
 const Stack = createStackNavigator();
 
@@ -68,9 +69,26 @@ function AppDrawer() {
 }
 
 const App = () => {
+
   const [loadingCache, setLoadingCache] = useState(true)
+  const [orientation, setOrientation] = useState("portrait")
+  const [deviceType, setDeviceType] = useState("phone")
+
+  function isPortrait() {
+    const dim = Dimensions.get("screen")
+    let value =  dim.height >= dim.width
+    console.log("value is, ", value)
+    return value
+  }
+
+
+  Dimensions.addEventListener("change", () => {
+    // orientation has changed, check if it is portrait or landscape here
+  })
+
 
   useEffect(() => {
+    isPortrait()
     persistCache({
       cache,
       storage: AsyncStorage,

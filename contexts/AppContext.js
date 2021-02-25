@@ -3,20 +3,11 @@ import React, { useState, createContext } from 'react';
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
-    const [burgerClicked, setBurgerClicked] = useState(false);
-
-    const toggleClicked = () => {
-        setBurgerClicked(true);
-        let overlay = document.getElementsByClassName('overlay');
-        if (overlay.dataset.state = 'on') {
-            overlay.dataset.state = 'off'
-        } else {
-            overlay.dataset.state = 'on';
-        }
-    }
+    const [stationsList, setStationsList] = useState([]);
+    const [track, setTrack] = useState([]);
 
     return (
-        <AppContext.Provider value={{ toggleClicked, burgerClicked }}>
+        <AppContext.Provider value={{ stationsList, setStationsList, track, setTrack }}>
             {props.children}
         </AppContext.Provider>
     )

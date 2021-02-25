@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import {
   View,
   SafeAreaView,
@@ -9,19 +9,17 @@ import {
   Animated,
   StyleSheet,
 } from "react-native";
-
-import songs from "./songs";
 import Controller from "./Controller";
 import SoundPlayer from 'react-native-sound-player'
+import { AppContext } from "../contexts/AppContext";
 
 const { width, height } = Dimensions.get("window");
 
 export default function Player({ navigation, route }) {
   const scrollX = useRef(new Animated.Value(0)).current;
-
+  const { track, setTrack, stationsList } = useContext(AppContext)
   const slider = useRef(null);
   const [songIndex, setSongIndex] = useState(0);
-  const [track, setTrack] = useState();
   const [playing, setPlaying] = useState(false)
   const [isTrackLoading, setTrackLoading] = useState(false)
   // for tranlating the album art
@@ -37,27 +35,27 @@ export default function Player({ navigation, route }) {
     // });
 
 
-    setTrack(songs[0].url)
+    // setTrack(stationsList.length > 0 && stationsList[0].streamuri)
 
-    console.log("songIndex, ", track)
+    // console.log("songIndex, ", track)
 
-    if (track !== undefined || track !== null) {
-      setPlaying(true)
-      SoundPlayer.play()
-    }
+    // if (track !== undefined || track !== null) {
+    //   setPlaying(true)
+    //   SoundPlayer.play()
+    // }
 
-    scrollX.addListener(({ value }) => {
-      const val = Math.round(value / width);
+    // scrollX.addListener(({ value }) => {
+    //   const val = Math.round(value / width);
 
-      setSongIndex(val);
+    //   setSongIndex(val);
 
-      // little buggy
-      //if previous index is not same then only update it
-      // if (val !== songIndex) {
-      //   setSongIndex(val);
-      //   console.log(val);
-      // }
-    });
+    //   // little buggy
+    //   //if previous index is not same then only update it
+    //   // if (val !== songIndex) {
+    //   //   setSongIndex(val);
+    //   //   console.log(val);
+    //   // }
+    // });
 
     onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
       console.log('finished playing', success)
@@ -69,36 +67,44 @@ export default function Player({ navigation, route }) {
       setTrackLoading(success)
     })
 
-    return () => {
-      scrollX.removeAllListeners();
-    };
+    console.log("stationsList.length > 0 && stationsList[0], ", stationsList.length > 0 && stationsList[0])
+
+    // setTrack(stationsList.length > 0 && stationsList[0])
+
+    // if (track !== undefined) {
+    //   SoundPlayer.playUrl(track.streamuri)
+    // }
+
+    // return () => {
+    //   scrollX.removeAllListeners();
+    // };
   }, []);
 
-  console.log("isTrackLoading, ", isTrackLoading)
+  console.log("isTrackLoading, ", isTrackLoading, "track is, ", track !== undefined && track)
 
-  const goNext = () => {
-    setPlaying(false)
-    setTrackLoading(false)
-    SoundPlayer.unmount()
-    let trackURL = songs[songIndex + 1].url
-    slider.current.scrollToOffset({
-      offset: (songIndex + 1) * width,
-    });
-    SoundPlayer.playUrl(trackURL)
-    console.log("playing, ", trackURL)
-  };
-  const goPrv = () => {
-    setPlaying(false)
-    setTrackLoading(false)
-    SoundPlayer.unmount()
-    let trackURL = songs[songIndex - 1].url
-    slider.current.scrollToOffset({
-      offset: (songIndex - 1) * width,
-    });
-    SoundPlayer.playUrl(trackURL)
+  // const goNext = () => {
+  //   setPlaying(false)
+  //   setTrackLoading(false)
+  //   SoundPlayer.unmount()
+  //   let trackURL = stationsList[songIndex + 1].url
+  //   slider.current.scrollToOffset({
+  //     offset: (songIndex + 1) * width,
+  //   });
+  //   SoundPlayer.playUrl(trackURL)
+  //   console.log("playing, ", trackURL)
+  // };
+  // const goPrv = () => {
+  //   setPlaying(false)
+  //   setTrackLoading(false)
+  //   SoundPlayer.unmount()
+  //   let trackURL = stationsList[songIndex - 1].url
+  //   slider.current.scrollToOffset({
+  //     offset: (songIndex - 1) * width,
+  //   });
+  //   SoundPlayer.playUrl(trackURL)
 
-    console.log("playing, ", trackURL)
-  };
+  //   console.log("playing, ", trackURL)
+  // };
 
   const pauseSong = () => {
     setPlaying(false)
@@ -144,7 +150,7 @@ export default function Player({ navigation, route }) {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
             scrollEventThrottle={16}
-            data={songs}
+            data={stationsList}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
             onScroll={Animated.event(
@@ -154,19 +160,20 @@ export default function Player({ navigation, route }) {
           />
         </SafeAreaView>
         <View>
-          <Text style={styles.title}>{songs[songIndex].title}</Text>
-          <Text style={styles.artist}>{songs[songIndex].artist}</Text>
+          <Text style={styles.title}>{stationsList[songIndex].title}</Text>
+          <Text style={styles.artist}>{stationsList[songIndex].artist}</Text>
         </View>
       </>
       } */}
 
-      <Controller style={styles.controls} onNext={goNext} onPrv={goPrv}
+      <Controller style={styles.controls} //onNext={goNext} onPrv={goPrv}
         isTrackLoading={isTrackLoading} pauseSong={pauseSong}
         playing={playing} playSong={playSong}
-        totalSongs={songs.length}
-        currentSongIndex={songIndex + 1}
-        setTrack={setTrack}
-        soundData={songs[songIndex]} />
+        totalSongs={stationsList.length}
+        //currentSongIndex={songIndex + 1}
+        //setTrack={setTrack}
+        soundData={track !== undefined && track}
+      />
     </View>
   );
 }

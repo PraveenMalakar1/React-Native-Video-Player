@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client'
 import AppLoading from "../Utils/AppLoading";
 import { QUERY_ALL_STATIONS } from "../Queries/stations"
 import { AppContext } from '../contexts/AppContext';
+import SoundPlayer from 'react-native-sound-player'
 
 
 const { width } = Dimensions.get("window");
@@ -12,7 +13,7 @@ const { width } = Dimensions.get("window");
 const StationItem = ({ station, onPress }) => {
     const { title, image } = station
 
-    console.log("image is sdf, ", image && image.url)
+    //console.log("image is sdf, ", image && image.url)
 
     return (
         <Pressable onPress={onPress} style={{ display: "flex", flexDirection: "column", margin: 5 }}>
@@ -27,9 +28,9 @@ const StationItem = ({ station, onPress }) => {
 
 const Stations = ({ navigation, route }) => {
 
-    const { burgerClicked } = useContext(AppContext)
+    const { stationsList, setStationsList, setTrack } = useContext(AppContext)
 
-    console.log("t is, ", burgerClicked)
+    //console.log("t is, ", stationsList, setStationsList)
 
     //console.log("route, ", route.params && route.params.Country)
 
@@ -50,6 +51,12 @@ const Stations = ({ navigation, route }) => {
         return <AppLoading />
     }
 
+    setStationsList(data && data.stations)
+
+    const myFuntion = () => {
+        console.log("my funtion called")
+    }
+
     //console.log("data is, ", data)
 
     return (
@@ -66,7 +73,10 @@ const Stations = ({ navigation, route }) => {
                         renderItem={({ item }) => (
                             <StationItem
                                 station={item}
-                                onPress={() => console.log("stationpresses, ", item)}
+                                onPress={() => {
+                                    myFuntion()
+                                    setTrack(item)
+                                }}
                             />
                         )}
                         keyExtractor={(country) => country.id.toString()}

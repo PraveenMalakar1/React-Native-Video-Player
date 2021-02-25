@@ -4,18 +4,19 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 
 const { width, height } = Dimensions.get("window");
 
-export default function Controller({ onNext, onPrv, isTrackLoading, pauseSong, playing, playSong, totalSongs, currentSongIndex, soundData }) {
-  console.log("isTrackLoading, ", soundData)
+export default function Controller({ isTrackLoading, pauseSong, playing, playSong, totalSongs, soundData }) {
+  let soundInfo = soundData !== undefined && soundData
+  console.log("soundInfo is, ", soundInfo)
   return (
     <View style={styles.container}>
       <View style={styles.trackInfo}>
         <Image
-          source={{ uri: soundData && soundData.image && soundData.image }}
+          source={{ uri: soundInfo && soundInfo.image && soundInfo.image.url }}
           style={styles.trackImage}
         />
         <View>
-          <Text style={styles.trackTitle}>{soundData.title}</Text>
-          <Text style={styles.trackSubTitle}>{soundData.country}</Text>
+          <Text style={styles.trackTitle}>{soundInfo && soundInfo.title}</Text>
+          <Text style={styles.trackSubTitle}>{soundInfo && soundInfo.country && soundInfo.country.title}</Text>
         </View>
       </View>
       {/* {currentSongIndex !== 1 ? <TouchableOpacity onPress={onPrv}>
