@@ -21,6 +21,7 @@ import { persistCache } from 'apollo3-cache-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 import AppContextProvider from "./contexts/AppContext"
 import { useDeviceOrientation } from "@react-native-community/hooks";
+import Login from './Components/Login';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,7 @@ function AppDrawer() {
       <Drawer.Screen name="AudioPlayer" component={AudioPlayer} />
       <Drawer.Screen name="VideoPlayer" component={VideoPlayer} />
       <Drawer.Screen name="Stations" component={Stations} />
+      <Drawer.Screen name="Login" component={Login} />
     </Drawer.Navigator>
   );
 }
