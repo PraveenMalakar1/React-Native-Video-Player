@@ -35,6 +35,7 @@ const client = new ApolloClient({
 })
 
 function CustomDrawerContent(props) {
+  console.log("props are, ", props)
   return (
     <DrawerContentScrollView style={styles.drawer} {...props}>
       <LogoImage />
@@ -45,14 +46,14 @@ function CustomDrawerContent(props) {
         }}
       ><Text>&nbsp;</Text></View>
       <DrawerItemList labelStyle={styles.menu} {...props} />
-      <DrawerItem labelStyle={styles.menu}
+      {/* <DrawerItem labelStyle={styles.menu}
         label="Close drawer"
         onPress={() => props.navigation.closeDrawer()}
       />
       <DrawerItem labelStyle={styles.menu}
         label="Toggle drawer"
         onPress={() => props.navigation.toggleDrawer()}
-      />
+      /> */}
     </DrawerContentScrollView>
   );
 }
@@ -61,13 +62,45 @@ const Drawer = createDrawerNavigator();
 
 function AppDrawer() {
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Countries" component={Countries} />
-      <Drawer.Screen name="AudioPlayer" component={AudioPlayer} />
-      <Drawer.Screen name="VideoPlayer" component={VideoPlayer} />
-      <Drawer.Screen name="Stations" component={Stations} />
-      <Drawer.Screen name="Login" component={Login} />
-      <Drawer.Screen name="Register" component={Register} />
+    <Drawer.Navigator drawerContent={props => {
+      const filteredProps = {
+        ...props,
+        state: {
+          ...props.state,
+          routeNames: props.state.routeNames.filter(
+            // To hide single option
+            // (routeName) => routeName !== 'HiddenPage1',
+            // To hide multiple options you can add & condition
+            (routeName) => {
+              routeName !== 'Stations'
+            },
+          ),
+          routes: props.state.routes.filter(
+            (route) =>
+              route.name !== 'Stations' && route.name !== 'AudioPlayer'  && route.name !== 'VideoPlayer'
+          ),
+        },
+      };
+      console.log("filteredProps, ", filteredProps.state)
+      return (
+        <DrawerContentScrollView style={styles.drawer} {...filteredProps}>
+          <LogoImage />
+          <View
+            style={{
+              borderColor: '#001b32',
+              borderWidth: 1
+            }}
+          ><Text>&nbsp;</Text></View>
+          <DrawerItemList labelStyle={styles.menu} {...filteredProps} />
+        </DrawerContentScrollView>
+      )
+    }}>
+      <Drawer.Screen name="Countries" options={{ drawerLabel: 'Countries' }} component={Countries} />
+      <Drawer.Screen name="AudioPlayer" options={{ drawerLabel: 'AudioPlayer' }} component={AudioPlayer} />
+      <Drawer.Screen name="VideoPlayer" options={{ drawerLabel: 'VideoPlayer' }} component={VideoPlayer} />
+      <Drawer.Screen name="Stations" options={{ drawerLabel: 'Stations' }} component={Stations} />
+      <Drawer.Screen name="Login" options={{ drawerLabel: 'Login' }} component={Login} />
+      <Drawer.Screen name="Register" options={{ drawerLabel: 'Register' }} component={Register} />
     </Drawer.Navigator>
   );
 }
@@ -80,7 +113,7 @@ const App = () => {
 
   function isPortrait() {
     const dim = Dimensions.get("screen")
-    let value =  dim.height >= dim.width
+    let value = dim.height >= dim.width
     console.log("value is, ", value)
     return value
   }
