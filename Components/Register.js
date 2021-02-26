@@ -63,6 +63,7 @@ export default function Register({ navigation }) {
             showError("Please add Contact Number")
             return
         }
+
         if (contactnumber) {
             const contactNumberCheck = '^[\+]?[0-9]*$'
             if (!contactnumber.match(contactNumberCheck)) {
@@ -77,9 +78,37 @@ export default function Register({ navigation }) {
             return
         }
 
-        axios.post('https://server.stream-africa.com/auth/local', {
-            identifier: email,
+        if (password) {
+            const passwordLetterCheck = "^(?=.*[a-z])(?=.*[A-Z])"
+            const passwordLengthCheck = "^(?=.{8,})"
+            const passwordNumberCheck = "^(?=.*[0-9])"
+            if (!formData.password.match(passwordLengthCheck)) {
+                showError("Password must have at least 8 characters")
+                return
+            }
+            if (!formData.password.match(passwordLetterCheck)) {
+                showError("Password must have one uppercase and lowercase")
+                return
+            }
+            if (!formData.password.match(passwordNumberCheck)) {
+                showError("Password must have one number")
+                return
+            }
+        }
+
+        axios.post('https://server.stream-africa.com/auth/local/register', {
+            firstname: firstname,
+            lastname: lastname,
+            displayname: displayname,
+            contactnumber: contactnumber,
+            username:
+                capitalize(firstname) +
+                capitalize(lastname) +
+                Math.floor(Math.random() * 90000) +
+                10000,
+            email: email,
             password: password,
+            role: role,
         })
             .then(function (response) {
                 setSubmitted(true)
