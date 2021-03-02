@@ -4,9 +4,11 @@ import axios from 'axios';
 import { AppContext } from "../contexts/AppContext";
 import styled from 'styled-components/native';
 import {
+    SERVER_URL,
     ROLE_STATIONADMIN,
     ROLE_LISTENER,
 } from "../Utils/props"
+import { capitalize } from "lodash"
 
 export default function Register({ navigation }) {
 
@@ -21,7 +23,10 @@ export default function Register({ navigation }) {
     const [lastname, setLastName] = useState("");
     const [displayError, setDisplayError] = useState(false)
     const [errorData, setErrorData] = useState("")
-    const [submitted, setSubmitted] = useState(false)
+    const [registered, setRegistered] = useState({
+        registered: false,
+        confirmed: false,
+    })
 
     const showError = error => {
         setErrorData(error)
@@ -82,24 +87,24 @@ export default function Register({ navigation }) {
             const passwordLetterCheck = "^(?=.*[a-z])(?=.*[A-Z])"
             const passwordLengthCheck = "^(?=.{8,})"
             const passwordNumberCheck = "^(?=.*[0-9])"
-            if (!formData.password.match(passwordLengthCheck)) {
+            if (!password.match(passwordLengthCheck)) {
                 showError("Password must have at least 8 characters")
                 return
             }
-            if (!formData.password.match(passwordLetterCheck)) {
+            if (!password.match(passwordLetterCheck)) {
                 showError("Password must have one uppercase and lowercase")
                 return
             }
-            if (!formData.password.match(passwordNumberCheck)) {
+            if (!password.match(passwordNumberCheck)) {
                 showError("Password must have one number")
                 return
             }
         }
 
-        axios.post('https://server.stream-africa.com/auth/local/register', {
+        axios.post(SERVER_URL+'auth/local/register', {
             firstname: firstname,
             lastname: lastname,
-            displayname: displayname,
+            displayname: displayName,
             contactnumber: contactnumber,
             username:
                 capitalize(firstname) +
@@ -111,42 +116,55 @@ export default function Register({ navigation }) {
             role: role,
         })
             .then(function (response) {
-                setSubmitted(true)
+                // Handle success. Dump to localstorage
+                setRegistered({
+                    registered: true,
+                    confirmed: response.data.user.confirmed,
+                })
                 if (response.data.jwt) {
+                    // Set the user's credentials
                     const user = response.data.user
-                    setUserState({
-                        ...userState,
-                        isLoggedIn: true,
-                        confirmed: user.confirmed,
-                        blocked: user.blocked,
-                        id: user.id,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                        username: user.username,
-                        email: user.email,
-                        provider: user.provider,
-                        role: user.role,
-                        stationID: response.data.stationID,
-                        station: response.data.station,
-                        artist: response.data.artist,
-                    })
-                    setSubmitted(false)
+                    if (user) {
+                        setUserState({
+                            ...userState,
+                            isLoggedIn: user.confirmed ? true : false,
+                            confirmed: user.confirmed,
+                            blocked: user.blocked,
+                            id: user.id,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            username: user.username,
+                            email: user.email,
+                            provider: user.provider,
+                        })
+                    } else {
+                        setUserState({
+                            isLoggedIn: false,
+                            requestSignin: false,
+                            // User Data From Response
+                            confirmed: null,
+                            blocked: null,
+                            id: null,
+                            firstname: null,
+                            lastname: null,
+                            username: null,
+                            email: null,
+                            provider: null,
+                        })
+                    }
                 }
             })
             .catch(function (error) {
+                // Handle error.
                 if (error.response) {
-                    showError(
-                        error.response.data.message[0].messages[0].message.replace(
-                            "Identifier",
-                            "Email"
-                        )
-                    )
+                    /*
+                     * The request was made and the server responded with a
+                     * status code that falls out of the range of 2xx
+                     */
+                    showError(error.response.data.message[0].messages[0].message)
                 }
-                setSubmitted(false)
             });
     }
-
-    console.log("role, ", role)
 
     return (
         <View style={styles.container}>
@@ -218,7 +236,7 @@ export default function Register({ navigation }) {
                     onChangeText={(password) => setPassword(password)}
                 />
             </View>
-            <TouchableOpacity style={styles.RegisterBtn} disabled={submitted} onPress={validateAndSend}>
+            <TouchableOpacity style={styles.RegisterBtn} disabled={registered.registered} onPress={validateAndSend}>
                 <Text style={styles.loginText}>SUBMIT</Text>
             </TouchableOpacity>
             <Text style={displayError ? styles.show : styles.hide}>

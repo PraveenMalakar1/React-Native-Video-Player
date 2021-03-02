@@ -23,40 +23,41 @@ import AppContextProvider from "./contexts/AppContext"
 import { useDeviceOrientation } from "@react-native-community/hooks";
 import Login from './Components/Login';
 import Register from './Components/Register';
+import { SERVER_URL } from './Utils/props'
 
 const Stack = createStackNavigator();
 
 const cache = new InMemoryCache()
 
 const client = new ApolloClient({
-  uri: 'https://server.stream-africa.com/graphql',
+  uri: SERVER_URL + 'graphql',
   cache,
   defaultOptions: { watchQuery: { fetchPolicy: 'cache-and-network' } },
 })
 
-function CustomDrawerContent(props) {
-  console.log("props are, ", props)
-  return (
-    <DrawerContentScrollView style={styles.drawer} {...props}>
-      <LogoImage />
-      <View
-        style={{
-          borderColor: '#001b32',
-          borderWidth: 1
-        }}
-      ><Text>&nbsp;</Text></View>
-      <DrawerItemList labelStyle={styles.menu} {...props} />
-      {/* <DrawerItem labelStyle={styles.menu}
-        label="Close drawer"
-        onPress={() => props.navigation.closeDrawer()}
-      />
-      <DrawerItem labelStyle={styles.menu}
-        label="Toggle drawer"
-        onPress={() => props.navigation.toggleDrawer()}
-      /> */}
-    </DrawerContentScrollView>
-  );
-}
+// function CustomDrawerContent(props) {
+//   console.log("props are, ", props)
+//   return (
+//     <DrawerContentScrollView style={styles.drawer} {...props}>
+//       <LogoImage />
+//       <View
+//         style={{
+//           borderColor: '#001b32',
+//           borderWidth: 1
+//         }}
+//       ><Text>&nbsp;</Text></View>
+//       <DrawerItemList labelStyle={styles.menu} {...props} />
+//       {/* <DrawerItem labelStyle={styles.menu}
+//         label="Close drawer"
+//         onPress={() => props.navigation.closeDrawer()}
+//       />
+//       <DrawerItem labelStyle={styles.menu}
+//         label="Toggle drawer"
+//         onPress={() => props.navigation.toggleDrawer()}
+//       /> */}
+//     </DrawerContentScrollView>
+//   );
+// }
 
 const Drawer = createDrawerNavigator();
 
@@ -77,7 +78,7 @@ function AppDrawer() {
           ),
           routes: props.state.routes.filter(
             (route) =>
-              route.name !== 'Stations' && route.name !== 'AudioPlayer'  && route.name !== 'VideoPlayer'
+              route.name !== 'Stations' && route.name !== 'AudioPlayer' && route.name !== 'VideoPlayer'
           ),
         },
       };

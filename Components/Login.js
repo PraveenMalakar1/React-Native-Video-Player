@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Image, Text, Dimensions, TextInput } from "react-native";
 import axios from 'axios';
 import { AppContext } from "../contexts/AppContext";
-
+import { SERVER_URL } from '../Utils/props'
 
 export default function Login({ navigation }) {
 
@@ -36,7 +36,9 @@ export default function Login({ navigation }) {
             return
         }
 
-        axios.post('https://server.stream-africa.com/auth/local', {
+        console.log(SERVER_URL + 'auth/local')
+
+        axios.post(SERVER_URL + 'auth/local', {
             identifier: email,
             password: password,
         })
