@@ -1,22 +1,20 @@
-import React from "react";
-import { SafeAreaView, StyleSheet, Text, View, Dimensions, FlatList, Image, Pressable, ScrollView } from "react-native";
+import React, { useContext } from "react";
+import { SafeAreaView, StyleSheet, Text, View, FlatList, Image, Pressable, ScrollView } from "react-native";
 import ScreenHeader from '../Utils/ScreenHeader'
 import { useQuery } from '@apollo/client'
 import AppLoading from "../Utils/AppLoading";
 import { ALL_COUNTRIES } from "../Queries/coutries"
-
-const { width } = Dimensions.get("window");
+import { AppContext } from "../contexts/AppContext";
 
 const CountryItem = ({ country, onPress }) => {
   const { title, image } = country
-
-  //console.log("image is, ", image)
+  const { deviceSize } = useContext(AppContext)
 
   return (
     <Pressable onPress={onPress} style={{ display: "flex", flexDirection: "column", margin: 5 }}>
       <Image
         source={{ uri: image.url }}
-        style={{ width: width / 2.7, height: 80, borderRadius: 5 }}
+        style={{ width: deviceSize.width / 2.10, height: (deviceSize.width / 2.10) / 1.5, borderRadius: 5 }}
       />
       <Text>{title}</Text>
     </Pressable>
@@ -61,8 +59,7 @@ const Countries = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   content: {
-    width: width / 1.2,
-    alignSelf: "center"
+    display: "flex"
   },
   bigText: {
     color: "#001b32",

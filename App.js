@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import VideoPlayer from './Components/VideoPlayer';
 import AudioPlayer from './Components/AudioPlayer';
@@ -9,23 +9,21 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from '@react-navigation/drawer';
 import Countries from './Components/Countries'
 import Stations from './Components/Stations'
 import LogoImage from './Components/LogoImage'
-import Icon from 'react-native-vector-icons/FontAwesome5'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import AppLoading from './Utils/AppLoading'
 import { persistCache } from 'apollo3-cache-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 import AppContextProvider from "./contexts/AppContext"
-import { useDeviceOrientation } from "@react-native-community/hooks";
 import Login from './Components/Login';
 import Register from './Components/Register';
 import { SERVER_URL } from './Utils/props'
 
 const Stack = createStackNavigator();
+
 
 const cache = new InMemoryCache()
 
@@ -62,6 +60,7 @@ const client = new ApolloClient({
 const Drawer = createDrawerNavigator();
 
 function AppDrawer() {
+  
   return (
     <Drawer.Navigator drawerContent={props => {
       const filteredProps = {
@@ -109,24 +108,8 @@ function AppDrawer() {
 const App = () => {
 
   const [loadingCache, setLoadingCache] = useState(true)
-  const [orientation, setOrientation] = useState("portrait")
-  const [deviceType, setDeviceType] = useState("phone")
-
-  function isPortrait() {
-    const dim = Dimensions.get("screen")
-    let value = dim.height >= dim.width
-    console.log("value is, ", value)
-    return value
-  }
-
-
-  Dimensions.addEventListener("change", () => {
-    // orientation has changed, check if it is portrait or landscape here
-  })
-
 
   useEffect(() => {
-    isPortrait()
     persistCache({
       cache,
       storage: AsyncStorage,

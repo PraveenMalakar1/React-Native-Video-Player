@@ -1,17 +1,14 @@
 import React, { useContext } from "react";
-import { SafeAreaView, StyleSheet, Text, View, Dimensions, FlatList, Image, Pressable, ScrollView } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, FlatList, Image, Pressable, ScrollView } from "react-native";
 import ScreenHeader from '../Utils/ScreenHeader'
 import { useQuery } from '@apollo/client'
 import AppLoading from "../Utils/AppLoading";
 import { QUERY_ALL_STATIONS } from "../Queries/stations"
 import { AppContext } from '../contexts/AppContext';
-import SoundPlayer from 'react-native-sound-player'
-
-
-const { width } = Dimensions.get("window");
 
 const StationItem = ({ station, onPress }) => {
     const { title, image } = station
+    const { deviceSize } = useContext(AppContext)
 
     //console.log("image is sdf, ", image && image.url)
 
@@ -19,7 +16,7 @@ const StationItem = ({ station, onPress }) => {
         <Pressable onPress={onPress} style={{ display: "flex", flexDirection: "column", margin: 5 }}>
             <Image
                 source={{ uri: image && image.url }}
-                style={{ width: width / 2.7, height: 80, borderRadius: 5 }}
+                style={{ width: deviceSize.width / 2.10, height: (deviceSize.width / 2.10) / 1.5, borderRadius: 5 }}
             />
             <Text>{title}</Text>
         </Pressable>
@@ -89,8 +86,7 @@ const Stations = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     content: {
-        width: width / 1.2,
-        alignSelf: "center"
+        display: "flex"
     },
     bigText: {
         color: "#001b32",
